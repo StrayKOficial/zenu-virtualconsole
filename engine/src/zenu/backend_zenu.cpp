@@ -4,8 +4,9 @@
 
 namespace zenu {
     // Hardware Mappings
-    volatile u32* const INPUT_REGS = (volatile u32*)0x02000000;
-    volatile f32* const APU_REGS   = (volatile f32*)0x02000100;
+    volatile u32* const INPUT_REGS  = (volatile u32*)0x02000000;
+    volatile f32* const ANALOG_REGS = (volatile f32*)0x02000010; // LX, LY, RX, RY
+    volatile f32* const APU_REGS    = (volatile f32*)0x02000100;
     
     // GPU Registers
     volatile u32* const REG_GPU_CMD   = (volatile u32*)0x03000000;
@@ -96,6 +97,11 @@ namespace zenu {
     
     bool input_is_down(Button btn) {
         return curr_input & btn;
+    }
+
+    float input_get_axis(AnalogAxis axis) {
+        if (axis < 0 || axis > 3) return 0.0f;
+        return ANALOG_REGS[axis];
     }
     
     // Audio

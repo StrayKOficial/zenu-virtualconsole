@@ -11,6 +11,7 @@ Zenu Studio is a comprehensive, professional-grade game development environment 
   - Live Console with streaming logs.
 - **Zenu Engine Core**:
   - High-performance 2D/3D graphics API.
+  - **Resolution Apex**: Native **800x600** High-Fidelity rendering.
   - Advanced Audio Processing Unit (APU) with multi-wave support.
   - Universal Gamepad/Controller support.
   - Bitmap font rendering for game UI.
@@ -23,9 +24,9 @@ Zenu Studio is a comprehensive, professional-grade game development environment 
 
 ## 🕹️ Included Games
 
+- **Zenu Horizon**: A breathtaking 3D Walk Simulator with procedural clouds, BOTW-style grass, and realistic lighting.
 - **Tetris GBC-Style**: High-fidelity recreation with Menu, Ghost piece, Hold/Next UI, and pro effects.
-- **Pong Ultra**: Arcade-quality Pong with AI difficulty, glowing effects, and sound.
-- **Falling Sand**: Deep particle simulation stress-testing thousands of "intelligent pixels".
+- **Zenu Doom**: Pseudo-3D raycasting engine with shading and Dual Analog controls.
 
 ## 🛠️ Project Structure
 

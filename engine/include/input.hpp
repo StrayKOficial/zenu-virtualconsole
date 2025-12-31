@@ -15,8 +15,16 @@ namespace zenu {
         BUTTON_SELECT = (1 << 7)
     };
 
+    enum AnalogAxis {
+        AXIS_LEFT_X,
+        AXIS_LEFT_Y,
+        AXIS_RIGHT_X,
+        AXIS_RIGHT_Y
+    };
+
     bool input_is_down(Button btn);
     bool input_just_pressed(Button btn);
+    float input_get_axis(AnalogAxis axis);
     
     // Internal use by backend
     void update_input_state();

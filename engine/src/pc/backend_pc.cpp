@@ -75,9 +75,9 @@ namespace zenu {
 
     void gfx_init() {
         if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMECONTROLLER) < 0) exit(1);
-        pc.window = SDL_CreateWindow("Zenu Engine (PC)", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 576, SDL_WINDOW_SHOWN);
+        pc.window = SDL_CreateWindow("Zenu Engine (PC)", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, SDL_WINDOW_SHOWN);
         pc.renderer = SDL_CreateRenderer(pc.window, -1, SDL_RENDERER_ACCELERATED);
-        SDL_RenderSetLogicalSize(pc.renderer, 160, 144);
+        SDL_RenderSetLogicalSize(pc.renderer, 800, 600);
         pc.running = true;
 
         // Audio Init
@@ -177,11 +177,59 @@ namespace zenu {
         return pressed;
     }
     
+    float input_get_axis(AnalogAxis axis) {
+        const Uint8* k = SDL_GetKeyboardState(NULL);
+        float axis_val = 0.0f;
+
+        // Controller logic
+        if (pc.controller) {
+            SDL_GameControllerAxis sdl_axis;
+            switch (axis) {
+                case AXIS_LEFT_X:  sdl_axis = SDL_CONTROLLER_AXIS_LEFTX; break;
+                case AXIS_LEFT_Y:  sdl_axis = SDL_CONTROLLER_AXIS_LEFTY; break;
+                case AXIS_RIGHT_X: sdl_axis = SDL_CONTROLLER_AXIS_RIGHTX; break;
+                case AXIS_RIGHT_Y: sdl_axis = SDL_CONTROLLER_AXIS_RIGHTY; break;
+                default: return 0.0f;
+            }
+            i16 val = SDL_GameControllerGetAxis(pc.controller, sdl_axis);
+            axis_val = val / 32767.0f;
+            if (axis_val > -0.1f && axis_val < 0.1f) axis_val = 0.0f;
+        }
+
+        // Keyboard fallback/mixing
+        if (axis_val == 0.0f) {
+            switch (axis) {
+                case AXIS_LEFT_X: 
+                    if (k[SDL_SCANCODE_A] || k[SDL_SCANCODE_LEFT]) axis_val -= 1.0f;
+                    if (k[SDL_SCANCODE_D] || k[SDL_SCANCODE_RIGHT]) axis_val += 1.0f;
+                    break;
+                case AXIS_LEFT_Y:
+                    if (k[SDL_SCANCODE_W] || k[SDL_SCANCODE_UP]) axis_val -= 1.0f;
+                    if (k[SDL_SCANCODE_S] || k[SDL_SCANCODE_DOWN]) axis_val += 1.0f;
+                    break;
+                case AXIS_RIGHT_X:
+                    if (k[SDL_SCANCODE_J]) axis_val -= 1.0f;
+                    if (k[SDL_SCANCODE_L]) axis_val += 1.0f;
+                    break;
+                case AXIS_RIGHT_Y:
+                    if (k[SDL_SCANCODE_I]) axis_val -= 1.0f;
+                    if (k[SDL_SCANCODE_K]) axis_val += 1.0f;
+                    break;
+            }
+        }
+        return axis_val;
+    }
+    
     // Simple state tracking for just_pressed
     static u8 prev_input = 0;
     static u8 curr_input = 0;
     
     void update_input_state() {
+        SDL_Event event;
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_QUIT) pc.running = false;
+        }
+
         prev_input = curr_input;
         curr_input = 0;
         if (input_is_down(BUTTON_UP))     curr_input |= BUTTON_UP;

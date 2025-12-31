@@ -1,0 +1,15 @@
+{
+    "objects": [
+        {
+            "id": "player",
+            "name": "Player",
+            "x": 80,
+            "y": 72,
+            "w": 16,
+            "h": 16,
+            "opacity": 255,
+            "type": "rect",
+            "color": "#ffff00"
+        }
+    ]
+}
