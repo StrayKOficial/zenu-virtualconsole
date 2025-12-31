@@ -1,0 +1,33 @@
+# Makefile.engine - Zenu Engine Build System
+PLATFORM ?= PC
+GAME_SRC ?= game/main.cpp
+
+ENGINE_DIR = engine
+BUILD_DIR = build
+
+COMMON_FLAGS = -I$(ENGINE_DIR)/include -O2 -Wall
+ENGINE_SRCS = $(ENGINE_DIR)/src/zenu/font.cpp
+
+ifeq ($(PLATFORM),PC)
+    CXX = g++
+    BACKEND_SRC = $(ENGINE_DIR)/src/pc/backend_pc.cpp
+    LIBS = -lSDL2
+    TARGET = $(BUILD_DIR)/game
+    FLAGS = $(COMMON_FLAGS) -DPLATFORM_PC
+else
+    # RISC-V Cross Compiler
+    CXX = riscv64-unknown-elf-g++
+    BACKEND_SRC = $(ENGINE_DIR)/src/zenu/backend_zenu.cpp
+    LIBS = -T $(ENGINE_DIR)/src/zenu/linker.ld -nostdlib -static
+    TARGET = $(BUILD_DIR)/game.boc
+    FLAGS = $(COMMON_FLAGS) -DPLATFORM_ZENU -march=rv32im -mabi=ilp32
+endif
+
+all: $(TARGET)
+
+$(TARGET): $(GAME_SRC) $(BACKEND_SRC) $(ENGINE_SRCS)
+	mkdir -p $(BUILD_DIR)
+	$(CXX) $(FLAGS) $^ $(LIBS) -o $@
+
+clean:
+	rm -rf $(BUILD_DIR)

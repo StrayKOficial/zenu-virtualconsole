@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Zenu Studio V2</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+    <div id="app">
+        <header class="top-bar">
+            <div class="logo"><i data-lucide="zap"></i> ZENU STUDIO PRO</div>
+            <div class="toolbar">
+                <button id="btn-new-project" class="btn-outline"><i data-lucide="folder-plus"></i> New</button>
+                <button id="btn-open-project" class="btn-outline"><i data-lucide="folder-open"></i> Open</button>
+                <span id="current-project-label" style="color:#888; margin-left:10px;">No project</span>
+                <button id="btn-play" class="btn-primary"><i data-lucide="play"></i> Play</button>
+                <button id="btn-stop" class="btn-secondary"><i data-lucide="square"></i> Stop</button>
+                <button id="btn-build" class="btn-outline"><i data-lucide="package"></i> Build ROM</button>
+            </div>
+        </header>
+
+        <!-- Project Modal -->
+        <div id="project-modal" class="modal hidden">
+            <div class="modal-content">
+                <h3 id="modal-title">Projects</h3>
+                <div id="modal-body"></div>
+                <div id="modal-footer">
+                    <button id="modal-close" class="btn-secondary">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <section class="main-workspace">
+            <!-- Left: Scene Outliner & Asset Manager -->
+            <aside class="left-panel">
+                <div class="panel">
+                    <div class="panel-header">OUTLINER <button id="add-obj">+</button></div>
+                    <ul id="scene-outliner" class="tree-view"></ul>
+                </div>
+                <div class="panel">
+                    <div class="panel-header">ASSETS</div>
+                    <div class="asset-grid" id="asset-browser">
+                        <label class="upload-btn">
+                            <i data-lucide="upload"></i>
+                            <input type="file" id="asset-upload" hidden>
+                        </label>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Center: Viewport & Code Editor -->
+            <main class="center-stage">
+                <div class="viewport-container" id="viewport-wrapper">
+                    <div class="viewport-header">SCENE EDITOR (1280x720)</div>
+                    <canvas id="engine-viewport" width="1280" height="720"></canvas>
+                </div>
+                <div class="editor-wrapper">
+                    <div class="tab-bar">
+                        <div class="tab active">main.cpp</div>
+                    </div>
+                    <div id="monaco-container"></div>
+                </div>
+            </main>
+
+            <!-- Right: Inspector -->
+            <aside class="right-panel">
+                <div class="panel-header">INSPECTOR</div>
+                <div id="inspector-content" class="inspector-form">
+                    <p class="empty-msg">Select an object to edit properties</p>
+                </div>
+            </aside>
+        </section>
+
+        <footer class="bottom-bar">
+            <div class="panel-header">CONSOLE & FILES</div>
+            <div class="footer-split">
+                <div id="file-system-panel" class="fs-view"></div>
+                <div id="console-output" class="console-view"></div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
+    <script src="editor.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+
+</html>
